@@ -9,6 +9,10 @@ const appStorage = new Storage()
 const userRouter = require('./route/user-router')(appStorage)
 app.use('/api/user', userRouter);
 
+const noteRouter = require('./route/note-router')(appStorage)
+app.use('/api/note', noteRouter);
+
+
 app.get('*', function(req, res){
   res.json("404 not found")
 });
