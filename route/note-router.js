@@ -5,6 +5,7 @@ const bodyParser = require('body-parser').json();
 const co = require('co');
 const debug = require('debug')('NOTE_ROUTER');
 const Note = require('../model/note');
+const AppError = require('../lib/app-error');
 
 function createNote(req, storage){
   var note;
@@ -21,7 +22,7 @@ function createNote(req, storage){
 function fetchNote(req , storage){
   const id = req.params.id;
   return storage.fetchItem('note', id);
-};
+}
 
 function deleteNote(req, storage){
   const id = req.params.id;
@@ -39,7 +40,7 @@ module.exports = function(storage){
     }).catch((err) => {
       debug('ERROR /api/note POST');
       debug(err);
-      res.status(400).send(err);
+      AppError.handleError(err, res);
     });
   });
 
@@ -51,7 +52,7 @@ module.exports = function(storage){
     }).catch((err) => {
       debug('ERROR /api/note/:id GET');
       debug(err);
-      res.status(400).send(err);
+      AppError.handleError(err, res);
     });
   });
 
@@ -63,9 +64,9 @@ module.exports = function(storage){
     }).catch((err) => {
       debug('ERROR /api/note/:id GET');
       debug(err);
-      res.status(400).send(err);
+      AppError.handleError(err, res);
     });
   });
 
   return noteRouter;
-}
+};

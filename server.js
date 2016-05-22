@@ -4,17 +4,17 @@ const port = process.env.PORT || 3000;
 const express = require('express');
 const Storage = require('./lib/storage');
 const app = express();
-const appStorage = new Storage()
+const appStorage = new Storage();
 
-const userRouter = require('./route/user-router')(appStorage)
+const userRouter = require('./route/user-router')(appStorage);
 app.use('/api/user', userRouter);
 
-const noteRouter = require('./route/note-router')(appStorage)
+const noteRouter = require('./route/note-router')(appStorage);
 app.use('/api/note', noteRouter);
 
 
 app.get('*', function(req, res){
-  res.json("404 not found")
+  res.json('404 not found');
 });
 
 const server = app.listen(port, function(){

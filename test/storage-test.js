@@ -15,7 +15,7 @@ describe('testing module storage', function(){
         done();
       }).catch((err) => {
         this.result = err;
-        done()
+        done();
       });
     });
 
@@ -49,7 +49,7 @@ describe('testing module storage', function(){
   describe('testing method deleteItem', function(){
     before((done) => {
       testStorage.deleteItem('note', 321)
-      .then((item) => {
+      .then(() => {
         this.result = testStorage.data.note[321];
         done();
       })

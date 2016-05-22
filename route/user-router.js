@@ -4,6 +4,7 @@ const Router = require('express').Router;
 const bodyParser = require('body-parser').json();
 const co = require('co');
 const debug = require('debug')('USER_ROUTER');
+const AppError = require('../lib/app-error');
 
 const User = require('../model/user');
 
@@ -19,16 +20,16 @@ function createUser(reqBody, storage){
 
 function fetchUser(id, storage){
   return storage.fetchItem('user', id);
-};
+}
 
 function deleteUser(id, storage){
   return storage.deleteItem('user', id);
 }
 
 module.exports = function(storage){
-  const noteRouter = Router();
-  noteRouter.use(bodyParser);
-  noteRouter.post('/', function(req, res){
+  const userRouter = Router();
+  userRouter.use(bodyParser);
+  userRouter.post('/', function(req, res){
     debug('HIT /API/USER POST');
     co(function* (){
       var user = yield createUser(req.body, storage);
@@ -36,11 +37,11 @@ module.exports = function(storage){
     }).catch((err) => {
       debug('ERROR /api/user POST');
       debug(err);
-      res.status(400).send(err);
+      AppError.handleError(err, res);
     });
   });
 
-  noteRouter.get('/:id', function(req, res){
+  userRouter.get('/:id', function(req, res){
     debug('HIT /API/USER/:id GET');
     co(function* (){
       var user = yield fetchUser(req.params.id, storage);
@@ -48,11 +49,11 @@ module.exports = function(storage){
     }).catch((err) => {
       debug('ERROR /api/user/:id GET');
       debug(err);
-      res.status(400).send(err);
+      AppError.handleError(err, res);
     });
   });
 
-  noteRouter.delete('/:id', function(req, res){
+  userRouter.delete('/:id', function(req, res){
     debug('HIT /API/USER/:id DELETE');
     co(function* (){
       yield deleteUser(req.params.id, storage);
@@ -60,9 +61,9 @@ module.exports = function(storage){
     }).catch((err) => {
       debug('ERROR /api/user/:id GET');
       debug(err);
-      res.status(400).send(err);
+      AppError.handleError(err, res);
     });
   });
 
-  return noteRouter;
-}
+  return userRouter;
+};
