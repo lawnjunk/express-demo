@@ -9,7 +9,6 @@ const Note = require('../model/note');
 function createNote(req, storage){
   var note;
   const authorID = req.headers.userid;
-  console.log(req.headers);
   const content = req.body.content;
   try {
     note = new Note(content, authorID);

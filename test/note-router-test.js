@@ -21,12 +21,13 @@ describe('testing module note-router', function(){
     done();
   });
 
-  //after((done) => {
-    //server.close(() => {
-      //console.log('server has terminated');
-      //done();
-    //});
-  //});
+  after((done) => {
+    server.close(() => {
+      server.isRunning = false;
+      console.log('server has terminated');
+      done();
+    });
+  });
 
   describe('testing post method', () => {
     before((done) => {
@@ -76,7 +77,7 @@ describe('testing module note-router', function(){
       });
     });
 
-    it('should return a note', () => {
+    it('should return a "success"', () => {
       expect(this.res.status).to.equal(200);
       expect(this.res.body.msg).to.equal('success');
     });

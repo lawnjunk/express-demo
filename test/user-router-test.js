@@ -21,6 +21,7 @@ describe('testing module user-router', function(){
 
   after((done) => {
     server.close(() => {
+      server.isRunning = false;
       console.log('server has terminated');
       done();
     });
@@ -39,7 +40,7 @@ describe('testing module user-router', function(){
       });
     });
 
-    it('should return a note', () => {
+    it('should return a user', () => {
       expect(this.res.status).to.equal(200);
       expect(this.res.body.username).to.equal('slugneo');
       expect(this.res.body.email).to.equal('slug@slug.com');
@@ -56,7 +57,7 @@ describe('testing module user-router', function(){
       });
     });
 
-    it('should return a note', () => {
+    it('should return a user', () => {
       expect(this.res.status).to.equal(200);
       expect(this.res.body.username).to.equal('slugneo');
       expect(this.res.body.email).to.equal('slug@slug.com');
@@ -73,7 +74,7 @@ describe('testing module user-router', function(){
       });
     });
 
-    it('should return a note', () => {
+    it('should return "success"', () => {
       expect(this.res.status).to.equal(200);
       expect(this.res.body.msg).to.equal('success');
     });
