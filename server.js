@@ -23,4 +23,3 @@ const server = app.listen(port, function(){
 
 server.isRunning = true;
 module.exports = server;
-
