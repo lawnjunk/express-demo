@@ -15,7 +15,7 @@ function createUser(reqBody, storage){
   } catch (err) {
     return Promise.reject(err);
   }
-  return storage.setItem('user', user)
+  return storage.setItem('user', user);
 }
 
 function fetchUser(id, storage){
