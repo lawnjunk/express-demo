@@ -1,10 +1,11 @@
 'use strict';
 
 const port = process.env.PORT || 3000;
+const baseStorageDir = process.env.STORAGE_DIR || `${__dirname}/data`;
 const express = require('express');
 const Storage = require('./lib/storage');
 const app = express();
-const appStorage = new Storage();
+const appStorage = new Storage(baseStorageDir);
 
 const userRouter = require('./route/user-router')(appStorage);
 app.use('/api/user', userRouter);

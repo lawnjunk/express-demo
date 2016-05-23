@@ -6,6 +6,7 @@ const server = require('../server');
 const uuid = require('node-uuid');
 
 const port = process.env.PORT || 3000;
+
 const baseUrl = `localhost:${port}/api`;
 const userId = uuid.v4();
 

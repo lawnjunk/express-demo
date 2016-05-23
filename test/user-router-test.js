@@ -5,6 +5,7 @@ const expect = require('chai').expect;
 const server = require('../server');
 
 const port = process.env.PORT || 3000;
+process.env.STORAGE_DIR || `${__dirname}/data`;
 const baseUrl = `localhost:${port}/api`;
 
 describe('testing module user-router', function(){

@@ -9,13 +9,19 @@ const AppError = require('../lib/app-error');
 const User = require('../model/user');
 
 function createUser(reqBody, storage){
-  var user;
-  try {
-    user = new User(reqBody.username, reqBody.email);
-  } catch (err) {
-    return Promise.reject(err);
-  }
-  return storage.setItem('user', user);
+  return new Promise((resolve, reject) => {
+    var user;
+    try {
+      user = new User(reqBody.username, reqBody.email);
+    } catch (err) {
+      return reject(err);
+    }
+    storage.setItem('user', user).then((user) => {
+      resolve(user);
+    }).catch((err) => {
+      reject(err);
+    });;
+  });
 }
 
 function fetchUser(id, storage){
@@ -32,9 +38,13 @@ module.exports = function(storage){
   userRouter.post('/', function(req, res){
     debug('HIT /API/USER POST');
     co(function* (){
+      debugger;
       var user = yield createUser(req.body, storage);
+      debugger;
       return res.status(200).json(user);
     }).catch((err) => {
+      console.log(err);
+      debugger;
       debug('ERROR /api/user POST');
       debug(err);
       AppError.handleError(err, res);
