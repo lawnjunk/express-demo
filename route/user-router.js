@@ -9,19 +9,13 @@ const AppError = require('../lib/app-error');
 const User = require('../model/user');
 
 function createUser(reqBody, storage){
-  return new Promise((resolve, reject) => {
-    var user;
-    try {
-      user = new User(reqBody.username, reqBody.email);
-    } catch (err) {
-      return reject(err);
-    }
-    storage.setItem('user', user).then((user) => {
-      resolve(user);
-    }).catch((err) => {
-      reject(err);
-    });
-  });
+  var user;
+  try {
+    user = new User(reqBody.username, reqBody.email);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+  return storage.setItem('user', user)
 }
 
 function fetchUser(id, storage){
