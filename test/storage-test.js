@@ -2,7 +2,6 @@
 
 const expect = require('chai').expect;
 const Storage = require('../lib/storage');
-const fs = require('fs');
 const testStorage = new Storage(`${__dirname}/data`);
 
 describe('testing module storage', function(){
@@ -22,9 +21,9 @@ describe('testing module storage', function(){
     });
 
     it('should resolve a note', (done) => {
-        expect(this.result.id).to.equal(321);
-        expect(this.result.content).to.equal('test content');
-        done();
+      expect(this.result.id).to.equal(321);
+      expect(this.result.content).to.equal('test content');
+      done();
     });
   });
 
