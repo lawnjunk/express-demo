@@ -9,10 +9,9 @@ const AppError = require('../lib/app-error');
 
 function createNote(req, storage){
   var note;
-  const authorID = req.headers.userid;
   const content = req.body.content;
   try {
-    note = new Note(content, authorID);
+    note = new Note(content);
   } catch (err) {
     return Promise.reject(err);
   }

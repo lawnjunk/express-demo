@@ -1,18 +1,19 @@
 'use strict';
 
-const co = require('co');
-const expect = require('chai').expect;
-const server = require('../server');
-
+// envirnonment vars
 const port = process.env.PORT || 3000;
 process.env.STORAGE_DIR || `${__dirname}/data`;
 
+// npm modules
+const co = require('co');
+const expect = require('chai').expect;
+
+// app modules
+const server = require('../server');
+
+// globals // modules with global dependencies
 const baseUrl = `localhost:${port}/api`;
-const request = require('superagent-use');
-const prefix = require('superagent-prefix')(baseUrl);
-const requestPromise = require('superagent-promise-plugin');
-request.use(prefix);
-request.use(requestPromise);
+const request = require('./lib/request')(baseUrl);
 
 describe('testing module user-router', function(){
   before((done) => {
