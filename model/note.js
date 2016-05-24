@@ -5,7 +5,7 @@ const AppError = require('../lib/app-error');
 
 module.exports = function(content, authorID){
   if (!content || !authorID){
-    throw new AppError('Note\'s require content and authorID', 400, 'bad request');
+    throw AppError.error400('Note constructor requires contetn and authorID');
   }
   this.id = uuid.v1();
   this.authorID = authorID;

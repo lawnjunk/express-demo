@@ -40,7 +40,7 @@ module.exports = function(storage){
     }).catch((err) => {
       debug('ERROR /api/note POST');
       debug(err);
-      AppError.handleError(err, res);
+      res.sendError(err);
     });
   });
 
@@ -52,7 +52,7 @@ module.exports = function(storage){
     }).catch((err) => {
       debug('ERROR /api/note/:id GET');
       debug(err);
-      AppError.handleError(err, res);
+      res.sendError(err);
     });
   });
 
@@ -64,7 +64,7 @@ module.exports = function(storage){
     }).catch((err) => {
       debug('ERROR /api/note/:id GET');
       debug(err);
-      AppError.handleError(err, res);
+      res.sendError(err);
     });
   });
 

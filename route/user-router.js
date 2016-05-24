@@ -38,7 +38,7 @@ module.exports = function(storage){
       console.log(err);
       debug('ERROR /api/user POST');
       debug(err);
-      AppError.handleError(err, res);
+      res.sendError(err);
     });
   });
 
@@ -50,7 +50,7 @@ module.exports = function(storage){
     }).catch((err) => {
       debug('ERROR /api/user/:id GET');
       debug(err);
-      AppError.handleError(err, res);
+      res.sendError(err);
     });
   });
 
@@ -62,7 +62,7 @@ module.exports = function(storage){
     }).catch((err) => {
       debug('ERROR /api/user/:id GET');
       debug(err);
-      AppError.handleError(err, res);
+      res.sendError(err);
     });
   });
 
