@@ -9,12 +9,6 @@ const appStorage = new Storage(baseStorageDir);
 const app = express();
 app.use(errorResponse);
 
-//app.get('/', function(req, res){
-  //console.log('booya');
-  //res.send('hahhahahahha');
-//});
-
-
 const userRouter = require('./route/user-router')(appStorage);
 app.use('/api/user', userRouter);
 
