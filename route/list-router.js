@@ -44,6 +44,7 @@ function assertNoteExists(reqBody, storage){
     storage.fetchItem('note', reqBody.id).then(() => {
       resolve(reqBody.id);
     }).catch((err) => {
+      console.log('wat', err);
       reject(err);
     });;
   });
@@ -89,6 +90,7 @@ module.exports = function(storage){
     debug('HIT /API/LIST/:ID/note POST');
     co(function* (){
       let id = yield assertNoteExists(req.body, storage)
+      console.log('booya', id);
       let list = yield fetchList(req.body, storage);
       list.addNoteID(id);
       list = yield saveList(list, storage);

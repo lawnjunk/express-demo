@@ -9,17 +9,16 @@ const fs = require('fs');
 
 // npm modules
 const co = require('co');
-const sa = require('superagent');
 const expect = require('chai').expect;
 
 // app modules
-const sp = require('../lib/superpromise');
 const server = require('../server');
 const tempData = require('./lib/temp-data');
 const Storage = require('../lib/storage');
 
-// globals
+// globals && modules with dipendencies
 const baseUrl = `localhost:${port}/api`;
+const request = require('./lib/request')(baseUrl);
 const testStorage = new Storage(storageDir);
 
 describe('testing module list-router', function(){
@@ -44,16 +43,15 @@ describe('testing module list-router', function(){
 
   describe('testing post method', () => {
     before((done) => {
-      const testList = {name: 'todo'};
-      const url =`${baseUrl}/list`;
-      sa.post(url)
-      .send(testList)
-      .end((err, res) => {
-        this.list = res.body
-        console.log(this.list);
+      co((function* (){
+        const testList = {name: 'todo'};
+        const url =`${baseUrl}/list`;
+        const res = yield request.post(url)
+        .send(testList);
         this.res = res;
+        this.list = res.body;
         done();
-      });
+      }).bind(this)).catch(done);
     });
 
     it('should return a list', () => {
@@ -65,12 +63,12 @@ describe('testing module list-router', function(){
 
   describe('testing get method', () => {
     before((done) => {
-      const url =`${baseUrl}/list/${this.list.id}`;
-      sa.get(url)
-      .end((err, res) => {
+      co((function* (){
+        const url =`/list/${this.list.id}`;
+        const res = yield request.get(url)
         this.res = res;
         done();
-      });
+      }).bind(this)).catch(done);
     });
 
     it('should return a list', () => {
@@ -82,12 +80,12 @@ describe('testing module list-router', function(){
 
   describe('testing delete method', () => {
     before((done) => {
-      const url =`${baseUrl}/list/${this.list.id}`;
-      sa.delete(url)
-      .end((err, res) => {
+      co((function* (){
+        const url =`/list/${this.list.id}`;
+        const res = yield request.del(url)
         this.res = res;
         done();
-      });
+      }).bind(this)).catch(done);
     });
 
     it('should return "success"', () => {
@@ -100,22 +98,20 @@ describe('testing module list-router', function(){
     before((done) => {
       co((function* (){
         yield tempData.mkTempTypeFile(storageDir, 'note')
-        const url =`${baseUrl}/list/${this.list.id}/note`;
-        const request = sa.post(url)
+        const url =`/list/${this.list.id}/note`;
+        const res = yield request.post(url)
         .send({id: tempData.tempnote.id});
-        const res = yield sp(request);
         this.result = res;
+      console.log('this.result.status', this.result.status);
         done();
-      }).bind(this)).catch((err) => {
-        this.result = err;
-        done();
-      });
+      }).bind(this)).catch(done);
     });
 
     after((done) => {
       co((function* (){
         yield tempData.rmTempTypeFile(storageDir, 'note');
-      }).bind(this))
+        done();
+      }).bind(done))
     });
 
     it('should return "success"', () => {
