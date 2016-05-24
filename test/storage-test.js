@@ -9,12 +9,10 @@ describe('testing module storage', function(){
     before((done) => {
       testStorage.setItem('note', {id:321, content: 'test content'})
       .then((item) => {
-        console.log('item', item);
         this.result = item;
         done();
       })
       .catch((err) => {
-        console.log(err);
         this.result = err;
         done();
       });

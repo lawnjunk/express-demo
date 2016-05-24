@@ -15,6 +15,9 @@ app.use('/api/user', userRouter);
 const noteRouter = require('./route/note-router')(appStorage);
 app.use('/api/note', noteRouter);
 
+const listRouter = require('./route/list-router')(appStorage);
+app.use('/api/list', listRouter);
+
 app.get('*', function(req, res){
   res.json('404 not found');
 });

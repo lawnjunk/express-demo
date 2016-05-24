@@ -4,7 +4,6 @@ const Router = require('express').Router;
 const bodyParser = require('body-parser').json();
 const co = require('co');
 const debug = require('debug')('USER_ROUTER');
-const AppError = require('../lib/app-error');
 
 const User = require('../model/user');
 
@@ -35,7 +34,6 @@ module.exports = function(storage){
       var user = yield createUser(req.body, storage);
       return res.status(200).json(user);
     }).catch((err) => {
-      console.log(err);
       debug('ERROR /api/user POST');
       debug(err);
       res.sendError(err);

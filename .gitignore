@@ -1,5 +1,7 @@
 # slugbyte ignore
 **/*.backup
+data
+test/data
 # Created by https://www.gitignore.io/api/osx,linux,node,vim
 ### OSX ###
 .DS_Store

@@ -1,12 +1,19 @@
 'use strict';
 
-const request = require('superagent');
+// envirnonment vars
+const port = process.env.PORT || 3000;
+process.env.STORAGE_DIR = `${__dirname}/data`;
+
+// npm modules
+const co = require('co');
 const expect = require('chai').expect;
+
+// app modules
 const server = require('../server');
 
-const port = process.env.PORT || 3000;
-process.env.STORAGE_DIR || `${__dirname}/data`;
+// globals // modules with global dependencies
 const baseUrl = `localhost:${port}/api`;
+const request = require('./lib/request')(baseUrl);
 
 describe('testing module user-router', function(){
   before((done) => {
@@ -31,14 +38,13 @@ describe('testing module user-router', function(){
   describe('testing post method', () => {
     before((done) => {
       const testUser = {username: 'slugneo', email: 'slug@slug.com'};
-      const url =`${baseUrl}/user`;
-      request.post(url)
-      .send(testUser)
-      .end((err, res) => {
+      co((function* (){
+        const url ='/user';
+        const res = yield request.post(url).send(testUser);
         this.user = res.body;
         this.res = res;
         done();
-      });
+      }).bind(this)).catch(done);
     });
 
     it('should return a user', () => {
@@ -50,12 +56,12 @@ describe('testing module user-router', function(){
 
   describe('testing get method', () => {
     before((done) => {
-      const url =`${baseUrl}/user/${this.user.id}`;
-      request.get(url)
-      .end((err, res) => {
+      co((function*(){
+        const url =`/user/${this.user.id}`;
+        const res = yield request.get(url);
         this.res = res;
         done();
-      });
+      }).bind(this)).catch(done);
     });
 
     it('should return a user', () => {
@@ -67,12 +73,12 @@ describe('testing module user-router', function(){
 
   describe('testing delete method', () => {
     before((done) => {
-      const url =`${baseUrl}/user/${this.user.id}`;
-      request.delete(url)
-      .end((err, res) => {
+      co((function*(){
+        const url =`/user/${this.user.id}`;
+        const res = yield request.del(url);
         this.res = res;
         done();
-      });
+      }).bind(this)).catch(done);
     });
 
     it('should return "success"', () => {

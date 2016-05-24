@@ -1,13 +1,20 @@
 'use strict';
 
-const request = require('superagent');
-const expect = require('chai').expect;
-const server = require('../server');
-const uuid = require('node-uuid');
-
+// environment variables
 const port = process.env.PORT || 3000;
+process.env.STORAGE_DIR = `${__dirname}/data`;
 
+// npm modules
+const co = require('co');
+const uuid = require('node-uuid');
+const expect = require('chai').expect;
+
+// app modules
+const server = require('../server');
+
+// globals && module with global dependencies
 const baseUrl = `localhost:${port}/api`;
+const request = require('./lib/request')(baseUrl);
 const userId = uuid.v4();
 
 describe('testing module note-router', function(){
@@ -32,16 +39,15 @@ describe('testing module note-router', function(){
 
   describe('testing post method', () => {
     before((done) => {
-      const testNote = {content: 'test content'};
-      const url =`${baseUrl}/note`;
-      request.post(url)
-      .send(testNote)
-      .set('UserID', userId)
-      .end((err, res) => {
-        this.note = res.body;
+      co((function* (){
+        const testNote = {content: 'test content'};
+        const url ='/note';
+        const res = yield request.post(url)
+        .send(testNote);
         this.res = res;
+        this.note = res.body;
         done();
-      });
+      }).bind(this)).catch(done);
     });
 
     it('should return a note', () => {
@@ -52,13 +58,12 @@ describe('testing module note-router', function(){
 
   describe('testing get method', () => {
     before((done) => {
-      const url =`${baseUrl}/note/${this.note.id}`;
-      request.get(url)
-      .set('UserID', userId)
-      .end((err, res) => {
+      co((function* (){
+        const url =`/note/${this.note.id}`;
+        const res = yield request.get(url);
         this.res = res;
         done();
-      });
+      }).bind(this)).catch(done);
     });
 
     it('should return a note', () => {
@@ -69,13 +74,13 @@ describe('testing module note-router', function(){
 
   describe('testing delete method', () => {
     before((done) => {
-      const url =`${baseUrl}/note/${this.note.id}`;
-      request.delete(url)
-      .set('UserID', userId)
-      .end((err, res) => {
+      co((function* (){
+        const url =`/note/${this.note.id}`;
+        const res = yield request.del(url)
+        .set('UserID', userId);
         this.res = res;
         done();
-      });
+      }).bind(this)).catch(done);
     });
 
     it('should return a "success"', () => {

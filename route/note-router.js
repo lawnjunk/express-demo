@@ -3,16 +3,15 @@
 const Router = require('express').Router;
 const bodyParser = require('body-parser').json();
 const co = require('co');
-const debug = require('debug')('NOTE_ROUTER');
+const debug = require('debug')('demo:note-router');
 const Note = require('../model/note');
-const AppError = require('../lib/app-error');
 
 function createNote(req, storage){
+  debug('enter createNote');
   var note;
-  const authorID = req.headers.userid;
   const content = req.body.content;
   try {
-    note = new Note(content, authorID);
+    note = new Note(content);
   } catch (err) {
     return Promise.reject(err);
   }
@@ -20,50 +19,47 @@ function createNote(req, storage){
 }
 
 function fetchNote(req , storage){
+  debug('fetchNote');
   const id = req.params.id;
   return storage.fetchItem('note', id);
 }
 
 function deleteNote(req, storage){
+  debug('deleteNote');
   const id = req.params.id;
   return storage.deleteItem('note', id);
 }
 
 module.exports = function(storage){
+  debug('module');
   const noteRouter = Router();
   noteRouter.use(bodyParser);
   noteRouter.post('/', function(req, res){
-    debug('HIT /API/NOTE POST');
+    debug('HIT /api/note POST');
     co(function* (){
       var note = yield createNote(req, storage);
       return res.status(200).json(note);
     }).catch((err) => {
-      debug('ERROR /api/note POST');
-      debug(err);
       res.sendError(err);
     });
   });
 
   noteRouter.get('/:id', function(req, res){
-    debug('HIT /API/NOTE/:id GET');
+    debug('HIT /ap/note/:id GET');
     co(function* (){
       var note = yield fetchNote(req, storage);
       return res.status(200).json(note);
     }).catch((err) => {
-      debug('ERROR /api/note/:id GET');
-      debug(err);
       res.sendError(err);
     });
   });
 
   noteRouter.delete('/:id', function(req, res){
-    debug('HIT /API/NOTE/:id DELETE');
+    debug('HIT /api/note/:id DELETE');
     co(function* (){
       yield deleteNote(req, storage);
       return res.status(200).json({msg: 'success'});
     }).catch((err) => {
-      debug('ERROR /api/note/:id GET');
-      debug(err);
       res.sendError(err);
     });
   });
