@@ -5,7 +5,6 @@ const bodyParser = require('body-parser').json();
 const co = require('co');
 const debug = require('debug')('demo:note-router');
 const Note = require('../model/note');
-const AppError = require('../lib/app-error');
 
 function createNote(req, storage){
   debug('enter createNote');

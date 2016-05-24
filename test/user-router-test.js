@@ -39,7 +39,7 @@ describe('testing module user-router', function(){
     before((done) => {
       const testUser = {username: 'slugneo', email: 'slug@slug.com'};
       co((function* (){
-        const url =`/user`;
+        const url ='/user';
         const res = yield request.post(url).send(testUser);
         this.user = res.body;
         this.res = res;

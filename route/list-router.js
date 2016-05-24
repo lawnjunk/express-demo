@@ -45,7 +45,7 @@ function assertNoteExists(reqBody, storage){
       resolve(reqBody.id);
     }).catch((err) => {
       reject(err);
-    });;
+    });
   });
 }
 
@@ -88,7 +88,7 @@ module.exports = function(storage){
   listRouter.post('/:id/note', function(req, res){
     debug('HIT /API/LIST/:ID/note POST');
     co(function* (){
-      let id = yield assertNoteExists(req.body, storage)
+      let id = yield assertNoteExists(req.body, storage);
       let list = yield fetchList(req.params.id, storage);
       list.noteIDs.push(id);
       list = yield saveList(list, storage);

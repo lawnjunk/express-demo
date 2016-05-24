@@ -2,7 +2,7 @@
 const uuid = require('node-uuid');
 const AppError = require('../lib/app-error');
 
-const List = module.exports = function(name){
+module.exports = function(name){
   if (!name){
     throw AppError.error400('list constructor requires name');
   }

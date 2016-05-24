@@ -41,7 +41,7 @@ describe('testing module note-router', function(){
     before((done) => {
       co((function* (){
         const testNote = {content: 'test content'};
-        const url =`/note`;
+        const url ='/note';
         const res = yield request.post(url)
         .send(testNote);
         this.res = res;

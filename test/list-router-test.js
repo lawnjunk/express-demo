@@ -4,9 +4,6 @@
 const port = process.env.PORT || 3000;
 const storageDir = process.env.STORAGE_DIR = `${__dirname}/data`;
 
-// node modules
-const fs = require('fs');
-
 // npm modules
 const co = require('co');
 const expect = require('chai').expect;
@@ -14,12 +11,10 @@ const expect = require('chai').expect;
 // app modules
 const server = require('../server');
 const tempData = require('./lib/temp-data');
-const Storage = require('../lib/storage');
 
 // globals && modules with dipendencies
 const baseUrl = `localhost:${port}/api`;
 const request = require('./lib/request')(baseUrl);
-const testStorage = new Storage(storageDir);
 
 describe('testing module list-router', function(){
   before((done) => {
@@ -65,7 +60,7 @@ describe('testing module list-router', function(){
     before((done) => {
       co((function* (){
         const url =`/list/${this.list.id}`;
-        const res = yield request.get(url)
+        const res = yield request.get(url);
         this.res = res;
         done();
       }).bind(this)).catch(done);
@@ -82,7 +77,7 @@ describe('testing module list-router', function(){
     before((done) => {
       co((function* (){
         const url =`/list/${this.list.id}`;
-        const res = yield request.del(url)
+        const res = yield request.del(url);
         this.res = res;
         done();
       }).bind(this)).catch(done);
@@ -98,7 +93,7 @@ describe('testing module list-router', function(){
     before((done) => {
       co((function* (){
         yield tempData.mkTempTypeFile(storageDir, 'list');
-        yield tempData.mkTempTypeFile(storageDir, 'note')
+        yield tempData.mkTempTypeFile(storageDir, 'note');
         const url =`/list/${tempData.templist.id}/note`;
         const res = yield request.post(url)
         .send({id: tempData.tempnote.id});
@@ -112,7 +107,7 @@ describe('testing module list-router', function(){
         yield tempData.rmTempTypeFile(storageDir, 'note');
         yield tempData.rmTempTypeFile(storageDir, 'list');
         done();
-      }).bind(done))
+      }).bind(done));
     });
 
     it('should return "success"', () => {

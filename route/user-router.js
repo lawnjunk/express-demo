@@ -4,7 +4,6 @@ const Router = require('express').Router;
 const bodyParser = require('body-parser').json();
 const co = require('co');
 const debug = require('debug')('USER_ROUTER');
-const AppError = require('../lib/app-error');
 
 const User = require('../model/user');
 
