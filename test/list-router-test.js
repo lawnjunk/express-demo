@@ -16,9 +16,11 @@ const expect = require('chai').expect;
 const sp = require('../lib/superpromise');
 const server = require('../server');
 const tempData = require('./lib/temp-data');
+const Storage = require('../lib/storage');
 
 // globals
 const baseUrl = `localhost:${port}/api`;
+const testStorage = new Storage(storageDir);
 
 describe('testing module list-router', function(){
   before((done) => {

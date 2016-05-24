@@ -3,16 +3,18 @@
 const Router = require('express').Router;
 const bodyParser = require('body-parser').json();
 const co = require('co');
-const debug = require('debug')('LIST_ROUTER');
+const debug = require('debug')('demo:list-router');
 const AppError = require('../lib/app-error');
 
 const List = require('../model/list');
 
 function saveList(list, storage){
+  debug('enter saveList');
   return storage.setItem('list', list);
 }
 
 function createList(reqBody, storage){
+  debug('enter createList');
   var list;
   try {
     list = new List(reqBody.name);
@@ -24,14 +26,17 @@ function createList(reqBody, storage){
 
 
 function fetchList(id, storage){
+  debug('enter fetchList');
   return storage.fetchItem('list', id);
 }
 
 function deleteList(id, storage){
+  debug('enter deleteList');
   return storage.deleteItem('list', id);
 }
 
-function assertNoteExists(reqBody){
+function assertNoteExists(reqBody, storage){
+  debug('enter assertNoteExists');
   return new Promise((resolve, reject) => {
     if (!reqBody.id){
       return reject(AppError.error400('did not povide note id'));
@@ -45,17 +50,17 @@ function assertNoteExists(reqBody){
 }
 
 module.exports = function(storage){
+  debug('enter module');
+
   const listRouter = Router();
   listRouter.use(bodyParser);
+
   listRouter.post('/', function(req, res){
     debug('HIT /API/LIST POST');
     co(function* (){
       var list = yield createList(req.body, storage);
       return res.status(200).json(list);
     }).catch((err) => {
-      console.log(err);
-      debug('ERROR /api/list POST');
-      debug(err);
       res.sendError(err);
     });
   });
@@ -66,8 +71,6 @@ module.exports = function(storage){
       var list = yield fetchList(req.params.id, storage);
       return res.status(200).json(list);
     }).catch((err) => {
-      debug('ERROR /api/list/:id GET');
-      debug(err);
       res.sendError(err);
     });
   });
@@ -78,24 +81,19 @@ module.exports = function(storage){
       yield deleteList(req.params.id, storage);
       return res.status(200).json({msg: 'success'});
     }).catch((err) => {
-      debug('ERROR /api/list/:id GET');
-      debug(err);
       res.sendError(err);
     });
   });
 
   listRouter.post('/:id/note', function(req, res){
-    debug('HIT /API/LIST POST');
+    debug('HIT /API/LIST/:ID/note POST');
     co(function* (){
-      let id = yield assertNoteExists(req.body)
+      let id = yield assertNoteExists(req.body, storage)
       let list = yield fetchList(req.body, storage);
       list.addNoteID(id);
       list = yield saveList(list, storage);
       return res.status(200).json(list);
     }).catch((err) => {
-      console.log(err);
-      debug('ERROR /api/list POST');
-      debug(err);
       res.sendError(err);
     });
   });
