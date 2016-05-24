@@ -82,15 +82,15 @@ exports.rmTempTypeFile = function(storagedir, type){
   return new Promise((resolve, reject) => {
     co((function *(){
       yield this.tempTypeFileExist(storagedir, type);
-      const filepath = this.tempTypeFilePath();
+      const filepath = this.tempTypeFilePath(storagedir, type);
       fs.unlink(filepath, function(err){
         if (err) return reject(err);
-        resolve();
         console.log('removed file');
+        resolve();
       });
     }).bind(this)).catch((err) => {
-      resolve();
       console.log('removed file');
+      resolve();
     });
   });
 };
