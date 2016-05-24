@@ -2,7 +2,7 @@
 
 // environment variables
 const port = process.env.PORT || 3000;
-const storageDir = process.env.STORAGE_DIR || `${__dirname}/data`;
+const storageDir = process.env.STORAGE_DIR = `${__dirname}/data`;
 
 // node modules
 const fs = require('fs');
@@ -97,8 +97,9 @@ describe('testing module list-router', function(){
   describe('testing /api/list/:id/note post  method', () => {
     before((done) => {
       co((function* (){
+        yield tempData.mkTempTypeFile(storageDir, 'list');
         yield tempData.mkTempTypeFile(storageDir, 'note')
-        const url =`/list/${this.list.id}/note`;
+        const url =`/list/${tempData.templist.id}/note`;
         const res = yield request.post(url)
         .send({id: tempData.tempnote.id});
         this.result = res;
@@ -110,13 +111,14 @@ describe('testing module list-router', function(){
     after((done) => {
       co((function* (){
         yield tempData.rmTempTypeFile(storageDir, 'note');
+        yield tempData.rmTempTypeFile(storageDir, 'list');
         done();
       }).bind(done))
     });
 
     it('should return "success"', () => {
       expect(this.result.status).to.equal(200);
-      expect(this.result.body.msg).to.equal('success');
+      expect(this.result.body.id).to.equal(tempData.templist.id);
     });
   });
 });

@@ -2,7 +2,7 @@
 
 // envirnonment vars
 const port = process.env.PORT || 3000;
-process.env.STORAGE_DIR || `${__dirname}/data`;
+process.env.STORAGE_DIR = `${__dirname}/data`;
 
 // npm modules
 const co = require('co');
