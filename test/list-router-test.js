@@ -103,7 +103,6 @@ describe('testing module list-router', function(){
         const res = yield request.post(url)
         .send({id: tempData.tempnote.id});
         this.result = res;
-      console.log('this.result.status', this.result.status);
         done();
       }).bind(this)).catch(done);
     });

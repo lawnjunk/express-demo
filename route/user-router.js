@@ -35,7 +35,6 @@ module.exports = function(storage){
       var user = yield createUser(req.body, storage);
       return res.status(200).json(user);
     }).catch((err) => {
-      console.log(err);
       debug('ERROR /api/user POST');
       debug(err);
       res.sendError(err);

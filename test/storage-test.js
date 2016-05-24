@@ -13,7 +13,6 @@ describe('testing module storage', function(){
         done();
       })
       .catch((err) => {
-        console.log(err);
         this.result = err;
         done();
       });
