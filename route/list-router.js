@@ -5,6 +5,7 @@ const bodyParser = require('body-parser').json();
 const co = require('co');
 const debug = require('debug')('demo:list-router');
 const AppError = require('../lib/app-error');
+const Promise = require('bluebird');
 
 const List = require('../model/list');
 

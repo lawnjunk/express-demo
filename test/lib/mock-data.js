@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const co = require('co');
+const Promise = require('bluebird');
 const debug = require('debug')('demo:test-data');
 const List = require('../../model/list');
 const Type = require('../../model/note');

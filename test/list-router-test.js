@@ -49,7 +49,7 @@ describe('testing module list-router', function(){
         const testList = {name: 'todo'};
         const url ='/list';
         const res = yield request.post(url)
-        .send(testList);
+          .send(testList);
         this.id = res.body.id;
         expect(res.status).to.equal(200);
         expect(res.body.name).to.equal('todo');

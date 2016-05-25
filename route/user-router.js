@@ -3,6 +3,7 @@
 const Router = require('express').Router;
 const bodyParser = require('body-parser').json();
 const co = require('co');
+const Promise = require('bluebird');
 const debug = require('debug')('USER_ROUTER');
 
 const User = require('../model/user');
