@@ -10,7 +10,7 @@ const expect = require('chai').expect;
 
 // app modules
 const server = require('../server');
-const tempData = require('./lib/temp-data');
+const mockData = require('./lib/mock-data');
 
 // globals && modules with dipendencies
 const baseUrl = `localhost:${port}/api`;
@@ -39,7 +39,7 @@ describe('testing module list-router', function(){
   describe('testing post method', () => {
     after((done) => {
       co((function* (){
-        tempData.rmTempTypeFileWithId(storageDir, 'list', this.id);
+        mockData.rmTempTypeFileWithId(storageDir, 'list', this.id);
         done();
       }).bind(this)).catch(done);
     });
@@ -62,21 +62,21 @@ describe('testing module list-router', function(){
   describe('testing get method', () => {
     before((done) => {
       co((function* (){
-        yield tempData.mkTempTypeFile(storageDir, 'list');
+        yield mockData.mkTempTypeFile(storageDir, 'list');
         done();
       }).bind(this)).catch(done);
     });
 
     after((done) => {
       co((function* (){
-        yield tempData.rmTempTypeFile(storageDir, 'list');
+        yield mockData.rmTempTypeFile(storageDir, 'list');
         done();
       }).bind(this)).catch(done);
     });
 
     it('should return a list', (done) => {
       co((function* (){
-        const url =`/list/${tempData.templist.id}`;
+        const url =`/list/${mockData.templist.id}`;
         const res = yield request.get(url);
         expect(res.status).to.equal(200);
         expect(res.body.name).to.equal('todo');
@@ -89,21 +89,21 @@ describe('testing module list-router', function(){
   describe('testing delete method', () => {
     before((done) => {
       co((function* (){
-        yield tempData.mkTempTypeFile(storageDir, 'list');
+        yield mockData.mkTempTypeFile(storageDir, 'list');
         done();
       }).bind(this)).catch(done);
     });
 
     after((done) => {
       co((function* (){
-        yield tempData.rmTempTypeFile(storageDir, 'list');
+        yield mockData.rmTempTypeFile(storageDir, 'list');
         done();
       }).bind(this)).catch(done);
     });
 
     it('should return "success"', (done) => {
       co((function* (){
-        const url =`/list/${tempData.templist.id}`;
+        const url =`/list/${mockData.templist.id}`;
         const res = yield request.del(url);
         expect(res.status).to.equal(200);
         expect(res.body.msg).to.equal('success');
@@ -115,27 +115,27 @@ describe('testing module list-router', function(){
   describe('testing /api/list/:id/note post  method', () => {
     before((done) => {
       co((function* (){
-        yield tempData.mkTempTypeFile(storageDir, 'list');
-        yield tempData.mkTempTypeFile(storageDir, 'note');
+        yield mockData.mkTempTypeFile(storageDir, 'list');
+        yield mockData.mkTempTypeFile(storageDir, 'note');
         done();
       }).bind(this)).catch(done);
     });
 
     after((done) => {
       co((function* (){
-        yield tempData.rmTempTypeFile(storageDir, 'note');
-        yield tempData.rmTempTypeFile(storageDir, 'list');
+        yield mockData.rmTempTypeFile(storageDir, 'note');
+        yield mockData.rmTempTypeFile(storageDir, 'list');
         done();
       }).bind(this)).catch(done);
     });
 
     it('should return "success"', (done) => {
       co((function* (){
-        const url =`/list/${tempData.templist.id}/note`;
+        const url =`/list/${mockData.templist.id}/note`;
         const res = yield request.post(url)
-        .send({id: tempData.tempnote.id});
+        .send({id: mockData.tempnote.id});
         expect(res.status).to.equal(200);
-        expect(res.body.id).to.equal(tempData.templist.id);
+        expect(res.body.id).to.equal(mockData.templist.id);
         done();
       }).bind(this)).catch(done);
     });
