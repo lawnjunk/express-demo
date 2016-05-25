@@ -47,7 +47,7 @@ describe('testing module list-router', function(){
     it('should return a list', (done) => {
       co((function* (){
         const testList = {name: 'todo'};
-        const url =`${baseUrl}/list`;
+        const url =`/list`;
         const res = yield request.post(url)
         .send(testList);
         this.id = res.body.id;
