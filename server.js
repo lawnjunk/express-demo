@@ -28,7 +28,7 @@ const listRouter = require('./route/list-router')(appStorage);
 app.use('/api/list', listRouter);
 
 app.get('*', function(req, res){
-  debug('* 404')
+  debug('* 404');
   res.json('404 not found');
 });
 
