@@ -37,55 +37,78 @@ describe('testing module list-router', function(){
   });
 
   describe('testing post method', () => {
-    before((done) => {
+    after((done) => {
+      co((function* (){
+        tempData.rmTempTypeFileWithId(storageDir, 'list', this.id);
+        done();
+      }).bind(this)).catch(done);
+    });
+
+    it('should return a list', (done) => {
       co((function* (){
         const testList = {name: 'todo'};
         const url =`${baseUrl}/list`;
         const res = yield request.post(url)
         .send(testList);
-        this.res = res;
-        this.list = res.body;
+        this.id = res.body.id;
+        expect(res.status).to.equal(200);
+        expect(res.body.name).to.equal('todo');
+        expect(res.body.noteIDs.length).to.equal(0);
         done();
       }).bind(this)).catch(done);
-    });
-
-    it('should return a list', () => {
-      expect(this.res.status).to.equal(200);
-      expect(this.list.name).to.equal('todo');
-      expect(this.list.noteIDs.length).to.equal(0);
     });
   });
 
   describe('testing get method', () => {
     before((done) => {
       co((function* (){
-        const url =`/list/${this.list.id}`;
-        const res = yield request.get(url);
-        this.res = res;
+        yield tempData.mkTempTypeFile(storageDir, 'list');
         done();
       }).bind(this)).catch(done);
     });
 
-    it('should return a list', () => {
-      expect(this.res.status).to.equal(200);
-      expect(this.res.body.name).to.equal('todo');
-      expect(this.res.body.noteIDs.length).to.equal(0);
+    after((done) => {
+      co((function* (){
+        yield tempData.rmTempTypeFile(storageDir, 'list');
+        done();
+      }).bind(this)).catch(done);
+    });
+
+    it('should return a list', (done) => {
+      co((function* (){
+        const url =`/list/${tempData.templist.id}`;
+        const res = yield request.get(url);
+        expect(res.status).to.equal(200);
+        expect(res.body.name).to.equal('todo');
+        expect(res.body.noteIDs.length).to.equal(0);
+        done();
+      }).bind(this)).catch(done);
     });
   });
 
   describe('testing delete method', () => {
     before((done) => {
       co((function* (){
-        const url =`/list/${this.list.id}`;
-        const res = yield request.del(url);
-        this.res = res;
+        yield tempData.mkTempTypeFile(storageDir, 'list');
         done();
       }).bind(this)).catch(done);
     });
 
-    it('should return "success"', () => {
-      expect(this.res.status).to.equal(200);
-      expect(this.res.body.msg).to.equal('success');
+    after((done) => {
+      co((function* (){
+        yield tempData.rmTempTypeFile(storageDir, 'list');
+        done();
+      }).bind(this)).catch(done);
+    });
+
+    it('should return "success"', (done) => {
+      co((function* (){
+        const url =`/list/${tempData.templist.id}`;
+        const res = yield request.del(url);
+        expect(res.status).to.equal(200);
+        expect(res.body.msg).to.equal('success');
+        done();
+      }).bind(this)).catch(done);
     });
   });
 
@@ -94,10 +117,6 @@ describe('testing module list-router', function(){
       co((function* (){
         yield tempData.mkTempTypeFile(storageDir, 'list');
         yield tempData.mkTempTypeFile(storageDir, 'note');
-        const url =`/list/${tempData.templist.id}/note`;
-        const res = yield request.post(url)
-        .send({id: tempData.tempnote.id});
-        this.result = res;
         done();
       }).bind(this)).catch(done);
     });
@@ -107,12 +126,18 @@ describe('testing module list-router', function(){
         yield tempData.rmTempTypeFile(storageDir, 'note');
         yield tempData.rmTempTypeFile(storageDir, 'list');
         done();
-      }).bind(done));
+      }).bind(this)).catch(done);
     });
 
-    it('should return "success"', () => {
-      expect(this.result.status).to.equal(200);
-      expect(this.result.body.id).to.equal(tempData.templist.id);
+    it('should return "success"', (done) => {
+      co((function* (){
+        const url =`/list/${tempData.templist.id}/note`;
+        const res = yield request.post(url)
+        .send({id: tempData.tempnote.id});
+        expect(res.status).to.equal(200);
+        expect(res.body.id).to.equal(tempData.templist.id);
+        done();
+      }).bind(this)).catch(done);
     });
   });
 });

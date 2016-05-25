@@ -95,3 +95,19 @@ exports.rmTempTypeFile = function(storagedir, type){
     });
   });
 };
+
+exports.rmTempTypeFileWithId = function(storagedir, type, id){
+  return new Promise((resolve, reject) => {
+    co((function *(){
+      const filepath = `${this.tempTypeDirPath(storagedir, type)}/${id}`;
+      fs.unlink(filepath, function(err){
+        if (err) return reject(err);
+        debug('removed file with id');
+        resolve();
+      });
+    }).bind(this)).catch((err) => {
+      debug('failed to remove file with id');
+      resolve();
+    });
+  });
+};
