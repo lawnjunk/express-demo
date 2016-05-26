@@ -3,6 +3,7 @@
 // node modules
 const express = require('express');
 const debug = require('debug')('demo:server');
+const morgan = require('morgan');
 
 // app modules
 const Storage = require('./lib/storage');
@@ -16,6 +17,7 @@ const appStorage = new Storage(baseStorageDir);
 
 // middleware
 app.use(errorResponse);
+app.use(morgan('dev'));
 
 // routes
 const userRouter = require('./route/user-router')(appStorage);
